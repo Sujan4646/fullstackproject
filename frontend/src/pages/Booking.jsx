@@ -17,6 +17,7 @@ export default function Booking() {
     const [totalCost, setTotalCost] = useState(0)
     const [days, setDays] = useState(0)
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const [paymentMethod, setPaymentMethod] = useState('online')
 
     useEffect(() => {
         const fetchCar = async () => {
@@ -63,16 +64,21 @@ export default function Booking() {
                 },
             }
 
-            const paymentId = 'pay_' + Math.floor(Math.random() * 1000000)
+            const paymentId = paymentMethod === 'cod'
+                ? 'cod_' + Math.floor(Math.random() * 1000000)
+                : 'pay_' + Math.floor(Math.random() * 1000000)
 
             await axios.post('/api/bookings', {
                 carId: id,
                 pickupDate,
                 returnDate,
-                paymentId
+                paymentId,
+                paymentMethod,
             }, config)
 
-            toast.success('Congratulations! Your booking is confirmed.')
+            toast.success(paymentMethod === 'cod'
+                ? 'Booking confirmed! Pay cash on delivery.'
+                : 'Congratulations! Your booking is confirmed.')
             navigate('/dashboard')
         } catch (error) {
             toast.error(error.response?.data?.message || 'Booking failed')
@@ -147,6 +153,53 @@ export default function Booking() {
                                 </div>
                             </div>
 
+                            {/* Payment Method Selection */}
+                            <div className='space-y-3'>
+                                <label className='text-[10px] font-bold text-slate-500 uppercase tracking-widest'>Payment Method</label>
+                                <div className='grid grid-cols-2 gap-4'>
+                                    <button
+                                        type='button'
+                                        onClick={() => setPaymentMethod('online')}
+                                        className={`flex flex-col items-center gap-3 p-5 rounded-2xl border-2 transition-all ${paymentMethod === 'online' ? 'border-primary bg-primary/10' : 'border-white/10 bg-white/5 hover:border-white/30'}`}
+                                    >
+                                        <FaCreditCard className={`text-2xl ${paymentMethod === 'online' ? 'text-primary' : 'text-slate-400'}`} />
+                                        <div>
+                                            <p className={`text-xs font-black uppercase tracking-widest ${paymentMethod === 'online' ? 'text-primary' : 'text-white'}`}>Online Pay</p>
+                                            <p className='text-[10px] text-slate-500 mt-1'>Internal Wallet</p>
+                                        </div>
+                                        {paymentMethod === 'online' && (
+                                            <span className='text-[9px] font-black text-black bg-primary px-2 py-0.5 rounded-full uppercase'>Selected</span>
+                                        )}
+                                    </button>
+
+                                    <button
+                                        type='button'
+                                        onClick={() => setPaymentMethod('cod')}
+                                        className={`flex flex-col items-center gap-3 p-5 rounded-2xl border-2 transition-all ${paymentMethod === 'cod' ? 'border-emerald-400 bg-emerald-400/10' : 'border-white/10 bg-white/5 hover:border-white/30'}`}
+                                    >
+                                        <span className={`text-2xl ${paymentMethod === 'cod' ? 'text-emerald-400' : 'text-slate-400'}`}>💵</span>
+                                        <div>
+                                            <p className={`text-xs font-black uppercase tracking-widest ${paymentMethod === 'cod' ? 'text-emerald-400' : 'text-white'}`}>Cash on Delivery</p>
+                                            <p className='text-[10px] text-slate-500 mt-1'>Pay at pickup</p>
+                                        </div>
+                                        {paymentMethod === 'cod' && (
+                                            <span className='text-[9px] font-black text-black bg-emerald-400 px-2 py-0.5 rounded-full uppercase'>Selected</span>
+                                        )}
+                                    </button>
+                                </div>
+
+                                {paymentMethod === 'cod' && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: -8 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className='flex items-start gap-3 p-4 rounded-xl bg-emerald-400/5 border border-emerald-400/20 text-xs text-slate-400'
+                                    >
+                                        <span className='text-emerald-400 text-base mt-0.5'>ℹ️</span>
+                                        <span>You'll pay <strong className='text-emerald-400'>₹{totalCost.toLocaleString()}</strong> in cash at the time of vehicle pickup. Please carry exact change.</span>
+                                    </motion.div>
+                                )}
+                            </div>
+
                             <div className='glass-card border-primary/20 bg-primary/5'>
                                 <div className='flex items-start gap-4'>
                                     <FaShieldAlt className='text-primary text-xl mt-1' />
@@ -165,12 +218,12 @@ export default function Booking() {
                                 >
                                     {isSubmitting ? 'Securing Fleet...' : (
                                         <>
-                                            Complete Reservation <FaChevronRight className='group-hover:translate-x-1 transition-transform' />
+                                            {paymentMethod === 'cod' ? 'Book & Pay on Delivery' : 'Complete Reservation'} <FaChevronRight className='group-hover:translate-x-1 transition-transform' />
                                         </>
                                     )}
                                 </button>
                                 <p className='text-center mt-4 text-[10px] text-slate-500 font-bold uppercase tracking-tighter'>
-                                    Secure 256-bit encrypted transaction
+                                    {paymentMethod === 'cod' ? 'No payment required now · Pay at pickup' : 'Secure 256-bit encrypted transaction'}
                                 </p>
                             </div>
                         </form>
@@ -220,10 +273,16 @@ export default function Booking() {
                             </div>
                         </div>
 
-                        <div className='flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/5'>
-                            <FaCreditCard className='text-slate-500 text-xl' />
+                        <div className={`flex items-center gap-4 p-4 rounded-xl border transition-all ${paymentMethod === 'cod' ? 'bg-emerald-400/5 border-emerald-400/20' : 'bg-white/5 border-white/5'}`}>
+                            {paymentMethod === 'cod' ? (
+                                <span className='text-xl'>💵</span>
+                            ) : (
+                                <FaCreditCard className='text-slate-500 text-xl' />
+                            )}
                             <div className='text-[10px] font-bold text-slate-500 uppercase tracking-widest'>
-                                Payment Method: <span className='text-white'>Internal Wallet</span>
+                                Payment Method: <span className={paymentMethod === 'cod' ? 'text-emerald-400' : 'text-white'}>
+                                    {paymentMethod === 'cod' ? 'Cash on Delivery' : 'Internal Wallet'}
+                                </span>
                             </div>
                         </div>
                     </motion.div>

@@ -121,14 +121,26 @@ export default function CarListing() {
                         <div className='space-y-6'>
                             <div className='space-y-3'>
                                 <label className='text-xs font-bold text-slate-500 uppercase tracking-widest'>Location</label>
-                                <input
-                                    type='text'
+                                <select
                                     name='location'
                                     value={filters.location}
-                                    placeholder='Search Location (e.g. Coimbatore)'
                                     onChange={onFilterChange}
-                                    className='w-full bg-bg-dark border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white outline-none focus:border-primary transition-all'
-                                />
+                                    className='w-full bg-bg-dark border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white outline-none focus:border-primary transition-all cursor-pointer'
+                                >
+                                    <option value=''>All Locations</option>
+                                    <option value='Chennai'>Chennai</option>
+                                    <option value='Mumbai'>Mumbai</option>
+                                    <option value='Kolkata'>Kolkata</option>
+                                    <option value='Bangalore'>Bangalore</option>
+                                    <option value='Hyderabad'>Hyderabad</option>
+                                    <option value='Cochin'>Cochin</option>
+                                    <option value='Delhi'>Delhi</option>
+                                    <option value='Pune'>Pune</option>
+                                    <option value='Ahmedabad'>Ahmedabad</option>
+                                    <option value='Jaipur'>Jaipur</option>
+                                    <option value='Surat'>Surat</option>
+                                    <option value='Lucknow'>Lucknow</option>
+                                </select>
                             </div>
 
                             <div className='space-y-3'>
