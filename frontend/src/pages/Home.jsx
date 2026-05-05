@@ -119,15 +119,26 @@ export default function Home() {
                     >
                         <div className="flex-1 flex items-center gap-4 bg-white/5 rounded-2xl px-6 py-4 border border-white/5 w-full">
                             <FaSearch className="text-slate-400" />
-                            <input
-                                type="text"
-                                placeholder="Pick-up Location"
+                            <select
                                 value={pickupLocation}
                                 onChange={(e) => setPickupLocation(e.target.value)}
-                                ref={inputRef}
-                                className="bg-transparent border-none outline-none text-white w-full text-sm font-medium"
+                                className="bg-transparent border-none outline-none text-white w-full text-sm font-medium cursor-pointer appearance-none"
                                 id="location-input"
-                            />
+                            >
+                                <option value="" className="bg-bg-dark text-slate-400">Select Pick-up Location</option>
+                                <option value="Chennai" className="bg-bg-dark text-white">Chennai</option>
+                                <option value="Mumbai" className="bg-bg-dark text-white">Mumbai</option>
+                                <option value="Kolkata" className="bg-bg-dark text-white">Kolkata</option>
+                                <option value="Bangalore" className="bg-bg-dark text-white">Bangalore</option>
+                                <option value="Hyderabad" className="bg-bg-dark text-white">Hyderabad</option>
+                                <option value="Cochin" className="bg-bg-dark text-white">Cochin</option>
+                                <option value="Delhi" className="bg-bg-dark text-white">Delhi</option>
+                                <option value="Pune" className="bg-bg-dark text-white">Pune</option>
+                                <option value="Ahmedabad" className="bg-bg-dark text-white">Ahmedabad</option>
+                                <option value="Jaipur" className="bg-bg-dark text-white">Jaipur</option>
+                                <option value="Surat" className="bg-bg-dark text-white">Surat</option>
+                                <option value="Lucknow" className="bg-bg-dark text-white">Lucknow</option>
+                            </select>
                         </div>
                         <div className="flex-1 flex items-center gap-4 bg-white/5 rounded-2xl px-6 py-4 border border-white/5 w-full">
                             <input
