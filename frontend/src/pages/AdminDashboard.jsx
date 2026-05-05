@@ -65,7 +65,7 @@ function AdminDashboard() {
         try {
             const config = { headers: { Authorization: `Bearer ${user.token}` } }
             const { data } = await axios.get('/api/bookings/all', config)
-            setBookings(data)
+            setBookings(Array.isArray(data) ? data : [])
         } catch (error) {
             toast.error('Error fetching bookings')
         }
@@ -74,7 +74,7 @@ function AdminDashboard() {
     const fetchCars = async () => {
         try {
             const { data } = await axios.get('/api/cars')
-            setCars(data)
+            setCars(Array.isArray(data) ? data : [])
         } catch (error) {
             toast.error('Error fetching cars')
         }
@@ -84,7 +84,7 @@ function AdminDashboard() {
         try {
             const config = { headers: { Authorization: `Bearer ${user.token}` } }
             const { data } = await axios.get('/api/admin/users', config)
-            setUsers(data)
+            setUsers(Array.isArray(data) ? data : [])
         } catch (error) {
             toast.error('Error fetching users')
         }
@@ -94,7 +94,7 @@ function AdminDashboard() {
         try {
             const config = { headers: { Authorization: `Bearer ${user.token}` } }
             const { data } = await axios.get('/api/admin/recent-bookings?limit=5', config)
-            setRecentBookings(data)
+            setRecentBookings(Array.isArray(data) ? data : [])
         } catch (error) {
             console.error('Error fetching recent bookings')
         }
@@ -104,7 +104,7 @@ function AdminDashboard() {
         try {
             const config = { headers: { Authorization: `Bearer ${user.token}` } }
             const { data } = await axios.get('/api/admin/car-analytics', config)
-            setCarAnalytics(data)
+            setCarAnalytics(Array.isArray(data) ? data : [])
         } catch (error) {
             console.error('Error fetching car analytics')
         }

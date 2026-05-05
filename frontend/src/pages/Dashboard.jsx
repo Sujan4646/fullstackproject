@@ -22,7 +22,7 @@ function Dashboard() {
                     },
                 }
                 const { data } = await axios.get('/api/bookings', config)
-                setBookings(data)
+                setBookings(Array.isArray(data) ? data : [])
                 setLoading(false)
             } catch (error) {
                 toast.error('Could not retrieve your journey history')

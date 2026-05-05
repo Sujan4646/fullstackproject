@@ -49,7 +49,7 @@ export default function Home() {
         const fetchFeatured = async () => {
             try {
                 const { data } = await axios.get('/api/cars')
-                setFeatured(data.slice(0, 4))
+                setFeatured(Array.isArray(data) ? data.slice(0, 4) : [])
             } catch (err) {
                 // silent error
             }

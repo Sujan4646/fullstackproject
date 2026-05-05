@@ -31,8 +31,8 @@ export default function CarListing() {
             try {
                 // Pass all query params to backend for efficient filtering
                 const { data } = await axios.get(`/api/cars${urlSearch}`)
-                setCars(data)
-                setFilteredCars(data)
+                setCars(Array.isArray(data) ? data : [])
+                setFilteredCars(Array.isArray(data) ? data : [])
                 setLoading(false)
             } catch (error) {
                 console.error(error)
